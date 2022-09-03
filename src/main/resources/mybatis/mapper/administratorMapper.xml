@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vrp_secondedition.mapper.AdministratorMapper">
+
+    <select id="selectIdByPhAndPw" resultType="integer">
+        select `id` from administrators
+        where phone=#{phone} and password=MD5(#{password})
+    </select>
+
+    <select id="selectOrders" resultType="com.example.vrp_secondedition.pojo.Order">
+        select * from orders
+    </select>
+
+    <select id="selectOrdersNoAllot" resultType="com.example.vrp_secondedition.pojo.Order">
+        select * from orders where state='未下单'
+    </select>
+
+    <select id="selectVehicle" resultType="com.example.vrp_secondedition.pojo.Vehicle">
+        select * from vehicles
+    </select>
+
+    <select id="selectAdmin" resultType="com.example.vrp_secondedition.pojo.Administrator">
+        select id,address, phone from administrators where id=#{id}
+    </select>
+</mapper>

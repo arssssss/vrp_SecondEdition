@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vrp_secondedition.mapper.UserMapper">
+
+    <insert id="addUser" >
+        insert into `users`(`password`,`phone`
+                            <if test="username!=null and username!=''">
+                                ,`username`
+                            </if>
+                            <if test="address!=null and address!=''">
+                                ,`address`
+                            </if>)
+        values (md5(#{password}),#{phone}
+        <if test="username!=null and username!=''">
+            ,#{username}
+        </if>
+        <if test="address!=null and address!=''">
+            ,#{address}
+        </if>)
+    </insert>
+
+    <select id="selectIdByPhAndPw" resultType="integer">
+        select id from `users` where phone=#{phone} and password=md5(#{password})
+    </select>
+
+    <select id="selectUserById" resultType="com.example.vrp_secondedition.pojo.User">
+        select `id`,`username`,`password`,`phone`,`address`
+        from `users`
+        where id=#{userId}
+    </select>
+
+    <update id="updateUser">
+        update `users`
+        <trim prefix="set" prefixOverrides=",">
+            <if test="username!=null and username!=''">
+                `username`=#{username}
+            </if>
+            <if test="phone!=null and phone!=''">
+                ,`phone`=#{phone}
+            </if>
+            <if test="address!=null and address!=''">
+                ,`address`=#{address}
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <select id="selectOrdersByUserId" resultType="com.example.vrp_secondedition.pojo.Order">
+        select *
+        from `orders`
+        where `user_id`=#{userId}
+    </select>
+
+    <insert id="addOrder">
+        insert into `orders`(`user_id`,`administrator_id`,`dispatcher_id`,`vehicle_id`,`demand`,`order_time`,`state`,`address`,`dispatcher_check`,`user_check`,`finish_time`,`routing_number`,`path_sequence`)
+        values (#{user_id},#{administrator_id},#{dispatcher_id},#{vehicle_id},#{demand},#{order_time},'未下单',#{address},#{dispatcher_check},#{user_check},#{finish_time},#{routing_number},#{path_sequence})
+    </insert>
+
+    <select id="selectOrderById" resultType="com.example.vrp_secondedition.pojo.Order">
+        select *
+        from `orders`
+        where `id`=#{id}
+    </select>
+
+    <update id="updateOrder">
+        update `orders`
+        <trim prefix="set" prefixOverrides=",">
+            <if test="administrator_id!=null and administrator_id!=''">
+                `administrator_id`=#{administrator_id}
+            </if>
+            <if test="dispatcher_id!=null and dispatcher_id!=''">
+                ,`dispatcher_id`=#{dispatcher_id}
+            </if>
+            <if test="vehicle_id!=null and vehicle_id!=''">
+                ,`vehicle_id`=#{vehicle_id}
+            </if>
+            <if test="demand!=null and demand!=''">
+                ,`demand`=#{demand}
+            </if>
+            <if test="address!=null and address!=''">
+                ,`address`=#{address}
+            </if>
+            <if test="state!=null and state!=''">
+                ,`state`=#{state}
+            </if>
+            <if test="user_check!=null and user_check!=''">
+                ,`user_check`=#{user_check}
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+</mapper>
